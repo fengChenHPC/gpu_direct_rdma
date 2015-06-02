@@ -2,7 +2,13 @@ nvcc=nvcc -O3
 CFLAGS= -I/usr/local/cuda-7.0/include -L/usr/local/cuda-7.0/lib64
 mpicc=mpic++ -O3
 
-all: d2d oldway h2h allreduce
+all: d2d oldway h2h allreduce cudaipc cudaipc2
+
+cudaipc : testCudaIPC.cpp
+	$(mpicc) -o $@ $^ -lcudart $(CFLAGS)
+
+cudaipc2 : testCudaIPC2.cpp
+	$(mpicc) -o $@ $^ -lcudart $(CFLAGS)
 
 d2d: d2d.o lib.o
 	$(mpicc) d2d.o lib.o -o $@ -lcudart $(CFLAGS)
